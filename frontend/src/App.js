@@ -1,9 +1,10 @@
 import React from "react";
-import User from "./user";
-import Timeline from "./timeline";
-import Explore from "./explore";
-import Header from "./header";
-import Footer from "./footer";
+import User from "./Authentication/user";
+import Timeline from "./Post/timeline";
+import Explore from "./Post/explore";
+import Header from "./header/header";
+import Footer from "./footer/footer";
+import SinglePost from "./Post/singlePost";
 
 import {
   BrowserRouter as Router,
@@ -12,23 +13,27 @@ import {
   Link,
   Redirect
 } from "react-router-dom";
-import SinglePost from "./singlePost";
 
-function App(props) {
-  console.log("props redux", props);
+function App() {
   return (
     <div>
       <Router>
         <Header />
 
         <Switch>
-          <Route path="/explore" render={props => <Explore {...props} />} />
-          <Route path="/timeline" render={props => <Timeline {...props} />} />
-          <Route
-            path="/singlePost"
-            render={props => <SinglePost {...props} />}
-          />
-          <Route path="/" render={props => <User {...props} />} />
+          <Route path="/explore">
+            <Explore />
+          </Route>
+          <Route path="/timeline">
+            <Timeline />
+          </Route>
+          <Route path="/singlePost">
+            <SinglePost />
+          </Route>
+          <Route path="/">
+            <User />
+          </Route>
+
           <Redirect from="*" to="/" />
         </Switch>
         <Footer />

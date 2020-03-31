@@ -11,7 +11,7 @@ import Login from "./login";
 import Forgot from "./forgot";
 import Reset from "./reset";
 
-function User(props) {
+function User() {
   return (
     <div>
       <meta charSet="utf-8" />
@@ -25,11 +25,21 @@ function User(props) {
       <div className="container">
         <div className="content">
           <Switch>
-            <Route exact path="/" render={props => <Register {...props} />} />
-            <Route path="/register" render={props => <Register {...props} />} />
-            <Route path="/login" render={props => <Login {...props} />} />
-            <Route path="/forgot" render={props => <Forgot {...props} />} />
-            <Route path="/reset" render={props => <Reset {...props} />} />
+            <Route exact path="/">
+              <Register />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/forgot">
+              <Forgot />
+            </Route>
+            <Route path="/reset">
+              <Reset />
+            </Route>
           </Switch>
           <div className="content_lft">
             <h1>Welcome from PPL!</h1>

@@ -41,6 +41,7 @@ module.exports = {
             if (err) {
               reject(err);
             } else {
+              console.log("verify");
               resolve("verify your email");
             }
           });

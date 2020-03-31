@@ -4,7 +4,7 @@ var upload = require("../schema/postData");
 var multer = require("multer");
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/home/com123/newProject/backend/public/profile");
+    cb(null, "./public/profile");
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);

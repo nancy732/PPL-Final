@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
 
@@ -6,7 +7,7 @@ function Reset(props) {
   const [psw, setPSW] = useState();
   const [repeat, setRepeat] = useState();
   const [result, setResult] = useState();
-
+  let history = useHistory();
   const handleChange = e => {
     setPSW(e.target.value);
   };
@@ -18,7 +19,7 @@ function Reset(props) {
     console.log("reset email called");
 
     const user = {
-      email: props.email,
+      email: props.setEmail,
       psw: psw,
       repeat: repeat
     };
@@ -28,7 +29,7 @@ function Reset(props) {
       .then(data => {
         setResult(data.data);
         if (data.data == "password changed") {
-          props.history.push("/login");
+          history.push("/login");
         }
       })
       .catch(err => console.log(err));
@@ -79,7 +80,7 @@ function Reset(props) {
 const mapStateToProps = state => {
   console.log("state", state);
   return {
-    email: state.user.email
+    setEmail: state.userAuthenticationReducer.userEmailReducer.setEmail
   };
 };
 

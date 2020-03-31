@@ -5,18 +5,20 @@ import {
   Switch,
   Route,
   Link,
-  Redirect
+  Redirect,
+  useHistory
 } from "react-router-dom";
 import Cookies from "js-cookie";
-import "./styles.css";
-import { user } from "./redux/index";
-import { click } from "./redux/index";
+import "../styles.css";
+import { userEmailAuthentication } from "../redux/index";
+import { loginAuthentication } from "../redux/index";
 import { connect } from "react-redux";
 
 function Login(props) {
   var show = localStorage.getItem("checkLogin");
+  let history = useHistory();
   if (show == "true") {
-    props.history.push("/profile");
+    history.push("/profile");
   }
   const [email, setEmail] = useState();
   const [psw, setPSW] = useState();
@@ -24,10 +26,9 @@ function Login(props) {
   const [active1, setActive1] = useState(false);
   const [Class, setClass] = useState("buttonTrue");
   const [result, setResult] = useState();
-  const [rememberMe, setRemember] = useState(false);
 
   useEffect(() => {
-    props.click(false);
+    props.loginAuthentication(false);
     if (navigator.cookieEnabled) {
       setEmail(Cookies.get("email"));
       setPSW(Cookies.get("password"));
@@ -70,14 +71,16 @@ function Login(props) {
     axios
       .post("http://localhost:8081/userRouter/users", user)
       .then(data => {
-        props.user(user.email);
+        props.userEmailAuthentication(user.email);
         setResult(data.data);
         setClass("buttonFalse");
         setActive(true);
 
         if (data.data == "verify your email") {
           localStorage.setItem("checkLogin", true);
-          props.history.push("/explore");
+          localStorage.setItem("email", email);
+
+          history.push("/explore");
         }
       })
 
@@ -149,10 +152,14 @@ function Login(props) {
   );
 }
 const mapStateToProps = state => {
+  console.log(state);
   return {
-    email: state.user.email,
-    click: state.click.click
+    setEmail: state.userAuthenticationReducer.userEmailReducer.setEmail,
+    checkLogin: state.userAuthenticationReducer.checkLoggedInReducer.checkLogin
   };
 };
 
-export default connect(mapStateToProps, { user, click })(Login);
+export default connect(mapStateToProps, {
+  userEmailAuthentication,
+  loginAuthentication
+})(Login);

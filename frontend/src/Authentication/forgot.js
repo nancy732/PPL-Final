@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { user, click } from "./redux/index";
+import { userEmailAuthentication } from "../redux/index";
 
 function Forgot(props) {
+  let history = useHistory();
+
   const [email, setEmail] = useState();
-  const [click, setClick] = useState(false);
+
   const [result, setResult] = useState();
 
   const changeState = e => {
@@ -27,10 +23,10 @@ function Forgot(props) {
     axios
       .post("http://localhost:8081/userRouter/forgot", user)
       .then(data => {
-        props.user(user.email);
+        props.userEmailAuthentication(user.email);
         setResult(data.data);
         if (data.data == "change password") {
-          props.history.push("/reset");
+          history.push("/reset");
         }
       })
       .catch(err => console.log(err));
@@ -73,7 +69,7 @@ function Forgot(props) {
 const mapStateToProps = state => {
   console.log("state", state);
   return {
-    email: state.user.email
+    setEmail: state.userAuthenticationReducer.userEmailReducer.setEmail
   };
 };
-export default connect(mapStateToProps, { user, click })(Forgot);
+export default connect(mapStateToProps, { userEmailAuthentication })(Forgot);

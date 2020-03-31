@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Comments from "./comment";
+import Comments from "../comment/comment";
 import axios from "axios";
 import { connect } from "react-redux";
-import { click } from "./redux/index";
-
+import { loginAuthentication } from "../redux/index";
+import { useHistory, useLocation } from "react-router-dom";
 function SinglePost(props) {
   var show = localStorage.getItem("checkLogin");
-
+  let history = useHistory();
+  let location = useLocation();
   if (show == "false") {
-    props.history.push("/login");
+    history.push("/login");
   }
 
   const [like, setLike] = useState();
 
   const [comment, setComment] = useState();
-  const [unlike, setUnlike] = useState();
   const [commentSubmit, setCommentSubmit] = useState(false);
   const [commentLength, setCommentLength] = useState();
   const [email, setEmail] = useState(localStorage.getItem("email"));
@@ -22,12 +22,11 @@ function SinglePost(props) {
   const [mail, setMail] = useState([]);
 
   useEffect(() => {
-    props.click(true);
-    setLike(props.location.state.like.length);
-    setUnlike(props.location.state.unlike.length);
-    setCommentLength(props.location.state.comment.length);
+    props.loginAuthentication(true);
+    setLike(location.state.like.length);
+    setCommentLength(location.state.comment.length);
     const user = {
-      _id: props.location.state._id,
+      _id: location.state._id,
       email: email,
       comment: comment
     };
@@ -46,7 +45,7 @@ function SinglePost(props) {
   const handlelikes = e => {
     e.preventDefault();
     const user = {
-      _id: props.location.state._id,
+      _id: location.state._id,
       email: email
     };
     axios
@@ -57,26 +56,13 @@ function SinglePost(props) {
       .catch(err => console.log(err));
   };
 
-  const handleUnlikes = e => {
-    e.preventDefault();
-    const user = {
-      _id: props.location.state._id,
-      email: email
-    };
-    axios
-      .post("http://localhost:8081/postRouter/manageUnlike", user)
-      .then(data => {
-        setUnlike(data.data[0].unlike.length);
-      })
-      .catch(err => console.log(err));
-  };
   const commentChange = e => {
     setComment(e.target.value);
   };
   const handleCommentSubmit = e => {
     e.preventDefault();
     const user = {
-      _id: props.location.state._id,
+      _id: location.state._id,
       comment: comment,
       email: email
     };
@@ -122,27 +108,27 @@ function SinglePost(props) {
       <div className="container">
         <div className="contnt_2">
           <div className="div_a">
-            <div className="div_title">{props.location.state.PostName}</div>
+            <div className="div_title">{location.state.PostName}</div>
             <div className="btm_rgt">
-              <div className="btm_arc">{props.location.state.category}</div>
+              <div className="btm_arc">{location.state.category}</div>
             </div>
             <div className="div_top">
               <div className="div_top_lft">
                 <img src="/images/img_6.png" />
-                {props.location.state.email}
+                {location.state.email}
               </div>
               <div className="div_top_rgt">
                 <span className="span_date">
-                  {new Date(props.location.state.date).toLocaleDateString()}
+                  {new Date(location.state.date).toLocaleDateString()}
                 </span>
                 <span className="span_time">
-                  {new Date(props.location.state.date).toLocaleTimeString()}
+                  {new Date(location.state.date).toLocaleTimeString()}
                 </span>
               </div>
             </div>
             <div className="div_image">
               <img
-                src={`http://localhost:8081/profile/${props.location.state.fileName}`}
+                src={`http://localhost:8081/profile/${location.state.fileName}`}
                 alt="pet"
               />
             </div>
@@ -189,19 +175,6 @@ function SinglePost(props) {
                 <span className="mid_cnt">{like}</span>
                 <span className="rit_cnt" />
               </div>
-              <li>
-                <a onClick={handleUnlikes}>
-                  <span className="btn_icon">
-                    <img src="/images/icon_003.png" alt="share" />
-                  </span>
-                  Unlike
-                </a>
-              </li>
-              <div className="like_count">
-                <span className="lft_cnt" />
-                <span className="mid_cnt">{unlike}</span>
-                <span className="rit_cnt" />
-              </div>
             </ul>
           </div>
         </div>
@@ -240,8 +213,8 @@ function SinglePost(props) {
 const mapStateToProps = state => {
   console.log("state", state);
   return {
-    click: state.click.click
+    checkLogin: state.userAuthenticationReducer.checkLoggedInReducer.checkLogin
   };
 };
 
-export default connect(mapStateToProps, { click })(SinglePost);
+export default connect(mapStateToProps, { loginAuthentication })(SinglePost);

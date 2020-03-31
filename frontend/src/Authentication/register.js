@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 import axios from "axios";
 import {
   BrowserRouter as Router,
@@ -7,16 +8,14 @@ import {
   Link,
   Redirect
 } from "react-router-dom";
-import "./styles.css";
+import "../styles.css";
 
 function Register(props) {
   var show = localStorage.getItem("checkLogin");
-
+  let history = useHistory();
   if (show == "true") {
-    props.history.push("/explore");
+    history.push("/explore");
   }
-
-  console.log("props register", props);
 
   const [form, setState] = useState({
     Username: "",
@@ -46,6 +45,8 @@ function Register(props) {
     axios
       .post("http://localhost:8081/userRouter/user", user)
       .then(data => {
+        console.log("data register", data.data);
+
         setResult(data.data);
         setClass("buttonFalse");
         if (data.data == "enter valid Password") {
@@ -53,7 +54,7 @@ function Register(props) {
         } else if (data.data == "email already exist") {
           setActive(true);
         } else if (data.data == "successful") {
-          props.history.push("/explore");
+          history.push("/explore");
         }
       })
       .catch(err => console.log(err));

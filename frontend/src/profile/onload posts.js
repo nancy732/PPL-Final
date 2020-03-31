@@ -4,13 +4,9 @@ import { Redirect } from "react-router-dom";
 function Onload(props) {
   const [click, setClick] = useState(false);
   const [like, setLike] = useState();
-  const [unlike, setUnlike] = useState();
-  const [buttonClicked, setButtonClicked] = useState();
-  const [email, setEmail] = useState(localStorage.getItem("email"));
 
   useEffect(() => {
     setLike(props.res.like.length);
-    setUnlike(props.res.unlike.length);
   });
 
   const handleImageClick = e => {
@@ -87,19 +83,6 @@ function Onload(props) {
                 <div className="like_count" style={{ marginRight: "10px" }}>
                   <span className="lft_cnt" />
                   <span className="mid_cnt">{props.res.like.length}</span>
-                  <span className="rit_cnt" />
-                </div>
-                <li>
-                  <a onClick={handleImageClick}>
-                    <span className="btn_icon">
-                      <img src="images/icon_003.png" alt="share" />
-                    </span>
-                    Unlike
-                  </a>
-                </li>
-                <div className="like_count">
-                  <span className="lft_cnt" />
-                  <span className="mid_cnt">{props.res.unlike.length}</span>
                   <span className="rit_cnt" />
                 </div>
               </ul>

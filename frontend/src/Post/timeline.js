@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Post from "./post";
+import Post from "../profile/post";
 import axios from "axios";
-import Onload from "./onload posts";
-import PaginacionTabla from "./pagination";
+import Onload from "../profile/onload posts";
+import PaginacionTabla from "../profile/pagination";
 import { connect } from "react-redux";
-import { click } from "./redux/index";
-
+import { loginAuthentication } from "../redux/index";
+import { useHistory } from "react-router-dom";
 function Timeline(props) {
   var show = localStorage.getItem("checkLogin");
+  let history = useHistory();
 
   if (show == "false") {
-    props.history.push("/login");
+    history.push("/login");
   }
 
   const [click, setClick] = useState(false);
@@ -20,10 +21,9 @@ function Timeline(props) {
   const [categoryArray, setCategoryArray] = useState([]);
   const [buttonCategory, setButtonCategory] = useState("All");
   const [category, setCategory] = useState();
-  const [email, setemail] = useState(localStorage.getItem("email"));
 
   useEffect(() => {
-    props.click(true);
+    props.loginAuthentication(true);
 
     window.scrollTo(0, 0);
     axios
@@ -347,9 +347,8 @@ function Timeline(props) {
 
 const mapStateToProps = state => {
   return {
-    email: state.user.email,
-    click: state.click.click
+    checkLogin: state.userAuthenticationReducer.checkLoggedInReducer.checkLogin
   };
 };
 
-export default connect(mapStateToProps, { click })(Timeline);
+export default connect(mapStateToProps, { loginAuthentication })(Timeline);

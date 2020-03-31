@@ -15,11 +15,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 mongoose
-  .connect(
-    "mongodb+srv://nancy1312:Nancy@1312@cluster0-texqj.mongodb.net/testMongoose?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect("mongodb://localhost:27017/testMongoose", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .catch(error => handleError(error));
+// mongoose
+//   .connect(
+//     "mongodb+srv://nancy1312:Nancy@1312@cluster0-texqj.mongodb.net/testMongoose?retryWrites=true&w=majority",
+//     { useNewUrlParser: true, useUnifiedTopology: true }
+//   )
+//   .catch(error => handleError("error", error));
 
 console.log("we are on server.js");
 
